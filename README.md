@@ -2,7 +2,7 @@
 
 Perform deep research on a specific topic and compile a final report with the ability to draft a research plan, search the web, and read web pages.
 
-This plugin uses Serp API and Firecrawl API. You need to provide API keys from both services to start using it.
+This plugin uses **Serp API** and **Firecrawl API**. You need to provide API keys from both services to start using it.
 
 ### Customizable
 The Deep Research plugin is customizable. You can duplicate this plugin and add your own tools to enhance the quality of the final report. The system instructions and prompts are also available in the plugin source.

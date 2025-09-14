@@ -1,0 +1,161 @@
+{
+    "id": "68584c72-fea2-4c1b-b52f-95cd399ebbb6",
+    "uuid": "68584c72-fea2-4c1b-b52f-95cd399ebbb6",
+    "title": "Deep Research",
+    "iconURL": "https://raw.githubusercontent.com/TypingMind/plugin-deep-research/refs/heads/main/icon.png",
+    "oauthConfig": null,
+    "userSettings": [
+        {
+            "name": "serpAPIKey",
+            "type": "password",
+            "label": "Serp API Key",
+            "required": true,
+            "description": "Enter your Serp API Key here, if you don't have one, sign up from serpapi.com"
+        },
+        {
+            "name": "firecrawlApiKey",
+            "label": "Firecrawl API Key",
+            "required": true,
+            "description": "Enter your Firecrawl API key. You can create one at https://www.firecrawl.dev/app/api-keys"
+        }
+    ],
+    "pluginFunctions": [
+        {
+            "id": "2836fff3-19fe-49ae-894e-3f07ebe73b8e",
+            "code": "function update_research_plan() {\n  // This tool does not yet have internal state, returning an acknowledgement is usually enough for LLMs to register and keep track of the todo items. May not work well with less-intelligent models or lists that are too long.\n  return \"Plan updated successfully.\"\n}",
+            "name": "Research Plan",
+            "openaiSpec": {
+                "name": "update_research_plan",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "todos"
+                    ],
+                    "properties": {
+                        "todos": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "required": [
+                                    "content",
+                                    "status",
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Unique identifier for the TODO item"
+                                    },
+                                    "status": {
+                                        "enum": [
+                                            "pending",
+                                            "in_progress",
+                                            "completed",
+                                            "cancelled"
+                                        ],
+                                        "type": "string",
+                                        "description": "The current status of the TODO item"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "The description/content of the TODO item"
+                                    }
+                                }
+                            },
+                            "minItems": 2,
+                            "description": "Array of TODO items to write to the workspace to create or update the todo list. If the ID of the todos already exists, they will be merged into the existing todos based on the id field, you can leave unchanged properties undefined."
+                        },
+                        "explanation": {
+                            "type": "string",
+                            "description": "A short description of the action you take (e.g., \"Creating a plan...\", \"Started item X\",...)"
+                        }
+                    }
+                },
+                "description": "Use this tool to create and manage a structured task list for your current research session. This helps track progress, organize complex investigations, and demonstrate thoroughness.\n\n### When to Use This Tool\n\nUse proactively for:\n1. Complex multi-step research (3+ distinct phases)\n2. Non-trivial investigations requiring careful planning\n3. User explicitly requests research todo list\n4. User provides multiple research topics (numbered/comma-separated)\n5. After receiving new research instructions - capture requirements as todos (use merge=false to add new ones)\n6. After completing research phases - mark complete with merge=true and add follow-ups\n7. When starting new research areas - mark as in_progress (ideally only one at a time)\n\n### When NOT to Use\n\nSkip for:\n1. Single, straightforward questions\n2. Trivial lookups with no organizational benefit\n3. Research completable in < 3 trivial steps\n4. Purely conversational/clarification requests\n5. Don't add a task to verify findings unless asked, or you'll overfocus on validation\n\n### Examples\n\n<example>\n  User: Research the impact of climate change on Arctic wildlife\n  Assistant: *Creates todo list:*\n  1. Analyze temperature trends in Arctic regions\n  2. Identify key Arctic species and habitats\n  3. Review scientific studies on wildlife impacts\n  4. Synthesize findings and correlations\n<reasoning>\n  Multi-phase research with dependencies requiring systematic investigation.\n</reasoning>\n</example>\n\n<example>\n  User: Compare healthcare systems across Nordic countries\n  Assistant: *Creates todo list with specific items for each country's system, funding models, outcomes, and comparative analysis*\n\n<reasoning>\n  Complex comparative research requiring systematic tracking across multiple systems.\n</reasoning>\n</example>\n\n<example>\n  User: Investigate renewable energy adoption, economic impacts, policy frameworks, and future projections.\n  Assistant: *Creates todo list breaking down each research area into specific investigation tasks*\n\n<reasoning>\n  Multiple complex research areas provided as list requiring organized investigation management.\n</reasoning>\n</example>\n\n<example>\n  User: Research why my company's market share is declining - analyze competitors, market trends, customer feedback.\n  Assistant: *Creates todo list: 1) Competitor analysis, 2) Market trend research, 3) Customer sentiment analysis, 4) Internal factor review, 5) Strategic recommendations*\n\n<reasoning>\n  Business analysis requires multiple research phases across different data sources.\n</reasoning>\n</example>\n\n### Examples of When NOT to Use the Todo List\n\n<example>\n  User: What's the capital of France?\n  Assistant: The capital of France is Paris.\n\n<reasoning>\n  Single trivial factual lookup completed in one step.\n</reasoning>\n</example>\n\n<example>\n  User: Explain what photosynthesis is.\n  Assistant: Photosynthesis is the process by which plants convert sunlight into energy...\n\n<reasoning>\n  Informational request with no complex research investigation needed.\n</reasoning>\n</example>\n\n<example>\n  User: Find the current stock price of Apple.\n  Assistant: *Looks up current AAPL price* Apple (AAPL) is currently trading at...\n\n<reasoning>\n  Single straightforward data lookup with immediate results.\n</reasoning>\n</example>\n\n<example>\n  User: What does GDP stand for?\n  Assistant: GDP stands for Gross Domestic Product...\n\n<reasoning>\n  Simple definition request with no multi-step research required.\n</reasoning>\n</example>\n\n### Task States and Management\n\n1. **Research States:**\n  - pending: Not yet started\n  - in_progress: Currently investigating\n  - completed: Research finished successfully\n  - cancelled: No longer needed\n\n2. **Research Management:**\n  - Update status in real-time\n  - Mark complete IMMEDIATELY after finishing each phase\n  - Only ONE research area in_progress at a time\n  - Complete current investigations before starting new ones\n\n3. **Research Breakdown:**\n  - Create specific, actionable investigation items\n  - Break complex research into manageable phases\n  - Use clear, descriptive research objectives\n\nWhen in doubt, use this tool. Proactive research management demonstrates thoroughness and ensures complete investigation of requirements."
+            },
+            "outputType": "respond_to_ai",
+            "implementationType": "javascript"
+        },
+        {
+            "id": "7a819d92-c53e-4e13-be8a-112eefa39c17",
+            "code": "",
+            "name": "Search Web",
+            "httpAction": {
+                "id": "1ee8a09f-cdb9-4d51-921a-b917deb6b64b",
+                "url": "https://cloud.typingmind.com/api/plugins/serp/search?api_key={serpAPIKey}&engine=google&q={query}&json_restrictor=organic_results[].{title,snippet,source,link}",
+                "name": "",
+                "method": "GET"
+            },
+            "openaiSpec": {
+                "name": "search_web",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "query"
+                    ],
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "The search term to look up on the web. Be specific and include relevant keywords for better results. For technical queries, include version numbers or dates if relevant."
+                        },
+                        "explanation": {
+                            "type": "string",
+                            "description": "One sentence explanation as to why this tool is being used, and how it contributes to the goal."
+                        }
+                    }
+                },
+                "description": "Search the web using SERP API (Google search engine) for real-time information about any topic. Use this tool when you need up-to-date information that might not be available in your training data, or when you need to verify current facts. The search results will include relevant snippets and URLs from web pages. This is particularly useful for questions about current events, technology updates, or any topic that requires recent information."
+            },
+            "outputType": "respond_to_ai",
+            "implementationType": "http"
+        },
+        {
+            "id": "40e566af-f012-4dca-90c3-9965f391bfc2",
+            "code": "",
+            "name": "Read Web Page",
+            "httpAction": {
+                "id": "fe67c640-6a5b-4ff8-bf44-394bccd0d109",
+                "url": "https://api.firecrawl.dev/v1/scrape",
+                "name": "",
+                "method": "POST",
+                "hasBody": true,
+                "hasHeaders": true,
+                "requestBody": "{\n    \"url\": \"{pageUrl}\",\n    \"formats\": [\n        \"markdown\"\n    ],\n    \"onlyMainContent\": true\n}",
+                "requestHeaders": "{\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Bearer {firecrawlApiKey}\"\n}"
+            },
+            "openaiSpec": {
+                "name": "get_web_page_content",
+                "parameters": {
+                    "type": "object",
+                    "required": [
+                        "pageUrl"
+                    ],
+                    "properties": {
+                        "pageUrl": {
+                            "type": "string",
+                            "description": "The URL of the web page to scrape for content."
+                        }
+                    }
+                },
+                "description": "Retrieves the text content of a web page in markdown format by scraping it using the Firecrawl API"
+            },
+            "outputType": "respond_to_ai",
+            "implementationType": "http"
+        }
+    ],
+    "overviewMarkdown": "## Deep Research\n\nPerform deep research on a specific topic and compile a final report with the ability to draft a research plan, search the web, and read web pages.\n\nThis plugin uses Serp API and Firecrawl API. You need to provide API keys from both services to start using it.\n\n### Customizable\nThe Deep Research plugin is customizable. You can duplicate this plugin and add your own tools to enhance the quality of the final report. The system instructions and prompts are also available in the plugin source.\n\nBy default, the Deep Research plugin comes with 3 tools: Research Plan, Search Web, and Read Web Page. Depending on your specific needs, you can add more tools like reading from a tweet, searching from a private database, or controlling a browser. The TypingMind plugin system allows you to add multiple tools to the Deep Research plugin and supports various ways to implement your tools using JavaScript, HTTP requests, or MCP.\n\n[Learn how to develop TypingMind plugins here](https://www.typingmind.com/plugins-docs).\n\n## Token Usage\nThis plugin may use multiple tools in multiple turns. A deep research task can run for up to 2 minutes. Please monitor the token usage closely to avoid consuming too many tokens. You can also modify the plugin to make it more token-efficient by adding your own tools to perform web searches and read web pages.\n\n### Example Usage\n\n> Compare the current latest EV cars and their prices available for purchase in the EU.\n",
+    "authenticationType": "AUTH_TYPE_NONE",
+    "dynamicContextEndpoints": [
+        {
+            "id": "800bd740-c179-4c63-b566-0a74223fc261",
+            "url": "",
+            "name": "Deep Research Mode",
+            "method": "GET",
+            "source": "static",
+            "staticContent": "Deep Research Mode: Enabled.\n\nYou are an AI research assistant tasked with conducting deep, thorough research on a given topic. Your goal is to gather comprehensive information, analyze it, and present a well-structured report. Follow these instructions carefully:\n\n1. Begin by reading the research task:\n<research_task>\n{lastUserMessage}\n</research_task>\n\n2. Create an initial research plan using the planning tool to create a todo list. This plan should outline the main areas of investigation and the steps you'll take to complete the task. Update the status of each todo list item as you progress through your research.\n\n3. Conduct at least one web search to gather information. In deep research mode, all information presented must come from the sources of your research. Before using any tools, provide your reasoning for choosing that particular tool.\n\n4. Follow these guidelines while gathering information:\n   - Collect all necessary data to carry out the research task concisely and thoroughly.\n   - Use bullet points or numbered lists for clarity when appropriate.\n   - Don't ask for unnecessary information or information already provided.\n   - Continue researching until all items in your todo list are completed.\n   - Use available tools one at a time to find the requested information.\n   - Gather data from multiple sources to ensure accuracy and comprehensiveness.\n\n5. Cite all sources used with links to the original websites.\n\n6. Once you have gathered all the information, compile a comprehensive report. Use markdown formatting (such as tables and bullet points) and tools (like graphs) to present your findings effectively. Highlight any surprising or interesting details you discovered during your research.\n\n7. Output your final report with the following structure\n   \n   [Title of report]\n   [Include your comprehensive report here, using appropriate formatting]\n   \n   Interesting Findings:\n   [Highlight surprising or noteworthy details]\n   \n   Sources:\n   [List all sources with links]",
+            "cacheDurationHours": 1,
+            "cacheRefreshPolicy": "REFRESH_NEVER"
+        }
+    ],
+    "sharedOAuthConnectionID": null
+}

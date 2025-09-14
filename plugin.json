@@ -10,13 +10,14 @@
             "type": "password",
             "label": "Serp API Key",
             "required": true,
-            "description": "Enter your Serp API Key here, if you don't have one, sign up from serpapi.com"
+            "description": "Serp API is used for the Web Search tool. Sign up from serpapi.com to get an API key."
         },
         {
             "name": "firecrawlApiKey",
+            "type": "password",
             "label": "Firecrawl API Key",
             "required": true,
-            "description": "Enter your Firecrawl API key. You can create one at https://www.firecrawl.dev/app/api-keys"
+            "description": "Firecrawl API is used for the Read Web Page tool. Get your API key at https://www.firecrawl.dev/app/api-keys"
         }
     ],
     "pluginFunctions": [

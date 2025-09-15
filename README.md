@@ -4,6 +4,12 @@ Perform deep research on a specific topic and compile a final report with the ab
 
 This plugin uses **Serp API** and **Firecrawl API**. You need to provide API keys from both services to start using it.
 
+### Research Mode
+
+- **Lightweight Mode**: In lightweight mode, Deep Research will attempt to extract data from online sources using the extract tool from Firecrawl, which saves tokens at a cost of reduced data accuracy. This is the default mode.
+- **Comprehensive Mode**: Deep Research will read the full content of the online sources to determine the final answer. If the web pages have a lot of content, it can risk consuming a lot of tokens, which is expensive and may exceed the model's context length limit.
+- **Dynamic Mode**: Deep Research will run in Lightweight Mode by default, but may opt in to read full web page content when absolutely needed to get the most accurate answer.
+
 ### Customizable
 The Deep Research plugin is customizable. You can duplicate this plugin and add your own tools to enhance the quality of the final report. The system instructions and prompts are also available in the plugin source.
 

@@ -88,7 +88,7 @@
                 "method": "GET"
             },
             "openaiSpec": {
-                "name": "search_web",
+                "name": "research_tool_search_web",
                 "parameters": {
                     "type": "object",
                     "required": [
@@ -125,7 +125,7 @@
                 "requestHeaders": "{\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Bearer {firecrawlApiKey}\"\n}"
             },
             "openaiSpec": {
-                "name": "get_web_page_content",
+                "name": "research_tool_read_web_page",
                 "parameters": {
                     "type": "object",
                     "required": [
